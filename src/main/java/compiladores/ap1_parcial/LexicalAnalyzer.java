@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class AnalisadorLexico {
+public class LexicalAnalyzer {
     private CodeFileReader fileReader;
     private List<Token> tokenList;
     private final int READING_BUFFER_SIZE = 16;
@@ -18,11 +18,12 @@ public class AnalisadorLexico {
     private int currentBuffer = 0;
     private Automaton automaton;
     
-    private class Automaton { 
+    public class Automaton { 
         private State actualState;
-        private final Map<String, State> statesMap;
+        private State firstState;
+        private final Map<String, State> transitionsTable;
         
-        private class State {
+        public class State {
             private String label;
             private Map<String, State> transitionsMap;
             private boolean isFinalState;
@@ -40,10 +41,11 @@ public class AnalisadorLexico {
             public State(String label, Map<String, State> transitionsMap, boolean isFinalState, TokenType tokenType) {
                 this.label = label;
                 this.transitionsMap = transitionsMap;
-                this.isFinalState = true;
+                this.isFinalState = isFinalState;
                 this.tokenType = tokenType;
             }
             
+            // Construtor dedicado para o HashMap inicial contendo os símbolos
             public State(String label) { 
                 this.label = label;
             }
@@ -83,38 +85,31 @@ public class AnalisadorLexico {
         
         public Automaton() {
             // Declaração do primeiro estado
-            actualState = new State("q0", new HashMap<>());
-            statesMap = new HashMap<>();
+            firstState = new State("q0", new HashMap<>());
+            actualState = firstState;
             
-            // Mapeia todos os estados num HashMap
-            statesMap.putAll((HashMap<String, State>) Map.ofEntries(
-                    Map.entry("q_DelimAbre", new State("q_DelimAbre")),
-                    Map.entry("q_DelimFecha", new State("q_DelimFecha")),
-                    Map.entry("q_OpAritMult", new State("q_OpAritMult")),
-                    Map.entry("q_OpAritDiv", new State("q_OpAritDiv")),
-                    Map.entry("q_OpAritSoma", new State("q_OpAritSoma")),
-                    Map.entry("q_OpAritSub", new State("q_OpAritSub")),
-                    Map.entry("q_OpRelMenor", new State("q_OpRelMenor")),
-                    Map.entry("q_OpRelMaior", new State("q_OpRelMaior")),
-                    Map.entry("q_OpRelIgual", new State("q_OpRelIgual")),
-                    Map.entry("q_Exclamacao", new State("q_Exclamacao")),
-                    
-            ));
+            transitionsTable = Map.ofEntries(
+                // Transições a aprtir do estado q0 
+                Map.entry("[", new State("q_DelimAbre", null, true, TokenType.DelimAbre)),
+                Map.entry("]", new State("q_DelimFecha", null, true, TokenType.DelimFecha)),
+                Map.entry("(", new State("q_AbrePar", null, true, TokenType.AbrePar)),
+                Map.entry(")", new State("q_FecharPar", null, true, TokenType.FechaPar))
+            );
             
-            
+            firstState.getTransitionsMap().putAll(transitionsTable);
             
             // Criar mapa interno para q0
-            HashMap<String, State> q0Map = new HashMap<>();
-
-            // Delimitadores
-            q0Map.put("[", new State("q_DelimAbre", null, true, TokenType.DelimAbre));
-            q0Map.put("]", new State("q_DelimFecha", null, true, TokenType.DelimFecha));
-
-            // Operadores aritméticos
-//            q0Map.put("*", TokenType.OpAritMult);
-//            q0Map.put("/", TokenType.OpAritDiv);
-//            q0Map.put("+", TokenType.OpAritSoma);
-//            q0Map.put("-", TokenType.OpAritSub);
+//            HashMap<String, StatesEnum> q0Map = new HashMap<>();
+//
+//            // Delimitadores
+//            q0Map.put("[", StatesEnum.q_DelimAbre);
+//            q0Map.put("]", StatesEnum.q_DelimFecha);
+//
+//            // Operadores aritméticos
+//            q0Map.put("*", StatesEnum.q_OpAritMult);
+//            q0Map.put("/", StatesEnum.q_OpAritDiv);
+//            q0Map.put("+", StatesEnum.q_OpAritSoma);
+//            q0Map.put("-", StatesEnum.q_OpAritSub);
 
             // Operadores relacionais
 //            q0Map.put("<", new State("q_OpRelMenor", new HashMap<>().putAll(Map.ofEntries()
@@ -124,10 +119,6 @@ public class AnalisadorLexico {
 //            q0Map.put(">=", TokenType.OpRelMaiorIgual);
 //            q0Map.put("==", TokenType.OpRelIgual);
 //            q0Map.put("!=", TokenType.OpRelDif);
-
-            // Parênteses
-            q0Map.put("(", TokenType.AbrePar);
-            q0Map.put(")", TokenType.FechaPar);
 
             // Atribuição
 //            HashMap<String, Object> q1Map = new HashMap<>();
@@ -139,7 +130,7 @@ public class AnalisadorLexico {
 //            q0Map.put(":", colonMap);
 
             // Adicionar q0 ao mapa principal
-            actualState.getTransitionsMap().putAll(q0Map);
+//            actualState.getTransitionsMap().putAll(q0Map);
         }
 
         public State getActualState() {
@@ -149,9 +140,17 @@ public class AnalisadorLexico {
         public void setActualState(State actualState) {
             this.actualState = actualState;
         }
+
+        public State getFirstState() {
+            return firstState;
+        }
+
+        public Map<String, State> getTransitionsTable() {
+            return transitionsTable;
+        }
     }
     
-    public AnalisadorLexico(String fileName) { 
+    public LexicalAnalyzer(String fileName) { 
         fileReader = new CodeFileReader(fileName);
         this.doubleBuffer = new char[2][READING_BUFFER_SIZE/2];
         this.tokenList = new LinkedList<>();
@@ -179,30 +178,37 @@ public class AnalisadorLexico {
         currentBuffer = (currentBuffer == 0) ? 1 : 0;
     }
     
+    // Possui toda a lógica de leitura de buffer e navegação pelos estados do autômato
     private void readBufferContent() {
         int bufferLength = doubleBuffer[currentBuffer].length;
+        Automaton.State actualState = automaton.getActualState();
         
         for(int a = 0; a < bufferLength; a++) {
             char ch = doubleBuffer[currentBuffer][a];
-            if (ch == '\0') break;
-            Automaton.State targetState = automaton.getActualState().getTransitionsMap().get(String.valueOf(ch));
+            if(ch == '\0') break;
+            // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
+            if(ch == ' ') continue;
             
-            if(targetState == null) { 
-                System.out.println("Houve um erro de análise léxica no código!");
-                return;
+            try { 
+                // Avança para o próximo estado do autômato
+                Automaton.State targetState = actualState.getTransitionsMap().get(String.valueOf(ch));
+                automaton.setActualState(targetState);
+                System.out.println(targetState.getTransitionsMap());
+    //            if(targetState == null) { 
+    //                System.out.println("Houve um erro de análise léxica no código!");
+    //                return;
+    //            }
+
+                // Se o estado atual não possui mais transições e é um estado final, adiciona para a lista de tokens
+                if(targetState.getTransitionsMap() == null && targetState.isFinalState()) { 
+                    // Adiciona o novo token para a lista de tokens
+                    tokenList.add(new Token(targetState.getTokenType(), ch));
+                    // Reinicia o automato
+                    automaton.setActualState(automaton.getFirstState());
+                }
             }
-            
-            switch(ch) { 
-                case '[' -> {
-                    tokenList.add(new Token(TokenType.DelimAbre, ch));
-                }
-                case ']' -> {
-                    tokenList.add(new Token(TokenType.DelimFecha, ch));
-                }
-                case (char) -1 -> {
-                    fileReader.setEoFReached(true);
-                    return;
-                }
+            catch(NullPointerException e) { 
+                automaton.setActualState(automaton.getFirstState());
             }
         }
     }
