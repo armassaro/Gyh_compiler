@@ -74,6 +74,7 @@ public class LexicalAnalyzer {
             firstState = StatesEnum.q_0.getState();
             
             transitionsMap = Map.ofEntries(
+                // q_0
                 Map.entry(firstState, Map.ofEntries(
                     Map.entry("(", StatesEnum.q_54.getState()),
                     Map.entry(")", StatesEnum.q_53.getState()),
@@ -87,13 +88,82 @@ public class LexicalAnalyzer {
                     Map.entry("+", StatesEnum.q_49.getState()),
                     Map.entry("-", StatesEnum.q_50.getState()),
                     Map.entry("[", StatesEnum.q_78.getState()),
-                    Map.entry("]", StatesEnum.q_79.getState())
+                    Map.entry("]", StatesEnum.q_79.getState()),
+                    // Letras
+                    Map.entry("O", StatesEnum.q_51.getState()),
+                    Map.entry("S", StatesEnum.q_31.getState()),
+                    Map.entry("D", StatesEnum.q_7.getState()),
+                    Map.entry("P", StatesEnum.q_10.getState()),
+                    Map.entry("I", StatesEnum.q_14.getState()),
+                    Map.entry("L", StatesEnum.q_17.getState()),
+                    Map.entry("R", StatesEnum.q_20.getState()),
+                    Map.entry("E", StatesEnum.q_36.getState()),
+                    Map.entry("F", StatesEnum.q_44.getState())
                 )),
-                Map.entry(StatesEnum.q_1.getState(), Map.of("=", StatesEnum.q_76.getState())),
-                Map.entry(StatesEnum.q_3.getState(), Map.of("=", StatesEnum.q_2.getState())),
-                Map.entry(StatesEnum.q_6.getState(), Map.of("=", StatesEnum.q_73.getState())),
-                Map.entry(StatesEnum.q_4.getState(), Map.of("=", StatesEnum.q_74.getState())),
-                Map.entry(StatesEnum.q_5.getState(), Map.of("=", StatesEnum.q_75.getState())),
+                Map.entry(StatesEnum.q_1.getState(), Map.of("=", StatesEnum.q_76.getState())),  // >=
+                Map.entry(StatesEnum.q_3.getState(), Map.of("=", StatesEnum.q_2.getState())),   // <=
+                Map.entry(StatesEnum.q_6.getState(), Map.of("=", StatesEnum.q_73.getState())),  // !=
+                Map.entry(StatesEnum.q_4.getState(), Map.of("=", StatesEnum.q_74.getState())),  // ==
+                Map.entry(StatesEnum.q_5.getState(), Map.of("=", StatesEnum.q_75.getState())),  // :=
+                    
+                Map.entry(StatesEnum.q_51.getState(), Map.of("U", StatesEnum.q_51.getState())), // OU
+                Map.entry(StatesEnum.q_31.getState(), Map.of("E", StatesEnum.q_32.getState())), // SE
+                Map.entry(StatesEnum.q_32.getState(), Map.of("N", StatesEnum.q_33.getState())), // SEN
+                Map.entry(StatesEnum.q_33.getState(), Map.of("A", StatesEnum.q_34.getState())), // SENA
+                Map.entry(StatesEnum.q_34.getState(), Map.of("O", StatesEnum.q_35.getState())), // SENAO
+                Map.entry(StatesEnum.q_7.getState(), Map.of("E", StatesEnum.q_8.getState())),   // DE
+                Map.entry(StatesEnum.q_8.getState(), Map.of("C", StatesEnum.q_9.getState())),   // DEC
+                Map.entry(StatesEnum.q_9.getState(), Map.of("L", StatesEnum.q_55.getState())),  // DECL
+                Map.entry(StatesEnum.q_55.getState(), Map.of("A", StatesEnum.q_56.getState())), // DECLA
+                Map.entry(StatesEnum.q_56.getState(), Map.of("R", StatesEnum.q_57.getState())), // DECLAR
+                Map.entry(StatesEnum.q_57.getState(), Map.of("A", StatesEnum.q_58.getState())), // DECLARA
+                Map.entry(StatesEnum.q_58.getState(), Map.of("R", StatesEnum.q_59.getState())),  // DECLARAR
+                Map.entry(StatesEnum.q_10.getState(), Map.of("R", StatesEnum.q_11.getState())), // PR
+                Map.entry(StatesEnum.q_11.getState(), Map.of("O", StatesEnum.q_12.getState())), // PRO
+                Map.entry(StatesEnum.q_12.getState(), Map.of("G", StatesEnum.q_13.getState())), // PROG
+                Map.entry(StatesEnum.q_13.getState(), Map.of("R", StatesEnum.q_60.getState())), // PROGR
+                Map.entry(StatesEnum.q_60.getState(), Map.of("A", StatesEnum.q_61.getState())), // PROGRA
+                Map.entry(StatesEnum.q_61.getState(), Map.of("M", StatesEnum.q_62.getState())), // PROGRAM
+                Map.entry(StatesEnum.q_62.getState(), Map.of("A", StatesEnum.q_63.getState())), // PROGRAMA
+                Map.entry(StatesEnum.q_14.getState(), Map.ofEntries(
+                    Map.entry("N", StatesEnum.q_15.getState()),                                 // IN
+                    Map.entry("M", StatesEnum.q_24.getState())                                  // IM
+                )),
+                Map.entry(StatesEnum.q_15.getState(), Map.ofEntries(
+                    Map.entry("I", StatesEnum.q_43.getState()),                                 // INI
+                    Map.entry("T", StatesEnum.q_16.getState())                                  // INT
+                )),
+                Map.entry(StatesEnum.q_43.getState(), Map.of("C", StatesEnum.q_68.getState())), // INIC
+                Map.entry(StatesEnum.q_68.getState(), Map.of("I", StatesEnum.q_69.getState())), // INICI
+                Map.entry(StatesEnum.q_69.getState(), Map.of("O", StatesEnum.q_70.getState())), // INICIO
+                Map.entry(StatesEnum.q_16.getState(), Map.of("E", StatesEnum.q_64.getState())), // INTE
+                Map.entry(StatesEnum.q_64.getState(), Map.of("G", StatesEnum.q_65.getState())), // INTEG
+                Map.entry(StatesEnum.q_65.getState(), Map.of("E", StatesEnum.q_66.getState())), // INTEGE
+                Map.entry(StatesEnum.q_66.getState(), Map.of("R", StatesEnum.q_67.getState())), // INTEGER
+                Map.entry(StatesEnum.q_24.getState(), Map.of("P", StatesEnum.q_25.getState())), // IMP
+                Map.entry(StatesEnum.q_25.getState(), Map.of("R", StatesEnum.q_26.getState())), // IMPR
+                Map.entry(StatesEnum.q_26.getState(), Map.of("I", StatesEnum.q_27.getState())), // IMPRI
+                Map.entry(StatesEnum.q_27.getState(), Map.of("M", StatesEnum.q_28.getState())), // IMPRIM
+                Map.entry(StatesEnum.q_28.getState(), Map.of("I", StatesEnum.q_29.getState())), // IMPRIMI
+                Map.entry(StatesEnum.q_29.getState(), Map.of("R", StatesEnum.q_30.getState())), // IMPRIMIR
+                Map.entry(StatesEnum.q_17.getState(), Map.of("E", StatesEnum.q_18.getState())), // LE
+                Map.entry(StatesEnum.q_18.getState(), Map.of("R", StatesEnum.q_19.getState())), // LER
+                Map.entry(StatesEnum.q_20.getState(), Map.of("E", StatesEnum.q_21.getState())), // RE
+                Map.entry(StatesEnum.q_21.getState(), Map.of("A", StatesEnum.q_22.getState())), // REA
+                Map.entry(StatesEnum.q_22.getState(), Map.of("L", StatesEnum.q_23.getState())), // REAL
+                Map.entry(StatesEnum.q_36.getState(), Map.of("N", StatesEnum.q_37.getState())), // EN
+                Map.entry(StatesEnum.q_37.getState(), Map.ofEntries(
+                    Map.entry("T", StatesEnum.q_38.getState()),                                 // ENT
+                    Map.entry("Q", StatesEnum.q_41.getState())                                  // ENQ
+                )),
+                Map.entry(StatesEnum.q_38.getState(), Map.of("A", StatesEnum.q_39.getState())), // ENTA
+                Map.entry(StatesEnum.q_39.getState(), Map.of("O", StatesEnum.q_40.getState())), // ENTAO
+                Map.entry(StatesEnum.q_41.getState(), Map.of("T", StatesEnum.q_42.getState())), // ENQT
+                Map.entry(StatesEnum.q_42.getState(), Map.of("O", StatesEnum.q_77.getState())), // ENQTO
+                Map.entry(StatesEnum.q_44.getState(), Map.of("I", StatesEnum.q_45.getState())), // FI
+                Map.entry(StatesEnum.q_45.getState(), Map.of("N", StatesEnum.q_46.getState())), // FIN
+                Map.entry(StatesEnum.q_46.getState(), Map.of("A", StatesEnum.q_71.getState())), // FINA
+                Map.entry(StatesEnum.q_71.getState(), Map.of("L", StatesEnum.q_72.getState()))  // FINAL
             );
         }
                 
@@ -152,7 +222,7 @@ public class LexicalAnalyzer {
             if(ch == '\0') break;
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
             if(ch == ' ') {
-                // Reseta o autômato par ao estado inicial ao ler um espaço
+                // Reseta o autômato para o estado inicial ao ler um espaço
                 automaton.setActualState(automaton.getFirstState());
                 continue;
             };
@@ -165,7 +235,7 @@ public class LexicalAnalyzer {
                 // Se o estado atual não possui mais transições e é um estado final, adiciona para a lista de tokens
                 if(transitionsMap.get(targetState) == null && targetState.isFinalState()) { 
                     // Adiciona o novo token para a lista de tokens
-                    tokenList.add(new Token(targetState.getTokenType(), ch));
+                    tokenList.add(new Token(targetState.getTokenType(), targetState.getTokenType().getContent()));
                     // Reinicia o automato
                     automaton.setActualState(automaton.getFirstState());
                 }

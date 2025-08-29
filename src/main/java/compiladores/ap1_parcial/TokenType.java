@@ -2,29 +2,43 @@ package compiladores.ap1_parcial;
 
 public enum TokenType {
     // Palavras reservadas
-    PCDec, PCProg, PCInt, PCReal, PCLer, PCImprimir, PCSe, PCEntao, PCSenao, PCEnqto, PCIni, PCFim,
+    PCDec("DECLARAR"), PCProg("PROGRAMA"), PCInt("INTEGER"), PCReal("REAL"), PCLer("LER"), PCImprimir("IMPRIMIR"), PCSe("SE"), PCEntao("ENTAO"), PCSenao("SENAO"), PCEnqto("ENQTO"), PCIni("INICIO"), PCFim("FINAL"),
     // Operadores aritméticos
-    OpAritMult, OpAritDiv, OpAritSoma, OpAritSub,
+    OpAritMult("*"), OpAritDiv("/"), OpAritSoma("+"), OpAritSub("-"),
     // Operadores relacionais
-    OpRelMenor, OpRelMenorIgual, OpRelMaior, OpRelMaiorIgual, OpRelIgual, OpRelDif,
+    OpRelMenor("<"), OpRelMenorIgual("<="), OpRelMaior(">"), OpRelMaiorIgual(">="), OpRelIgual("=="), OpRelDif("!="),
     // Operadores lógicos
-    OpBoolE, OpBoolOu,
+    OpBoolE("E"), OpBoolOu("OU"),
     // Símbolos delimitadores
-    DelimAbre, DelimFecha,
+    DelimAbre("["), DelimFecha("]"),
     // Símbolo de atribuição
-    Atrib,
+    Atrib(":="),
     // Símbolos de parênteses
-    AbrePar, FechaPar,
+    AbrePar("("), FechaPar(")"),
     // Declaração de variável
-    Var,
+    Var(""),
     // Declaração de número inteiro
-    NumInt,
+    NumInt(""),
     // Declaração de número decimal
-    NumReal,
+    NumReal(""),
     // Declaração de string
-    Cadeia,
+    Cadeia(""),
     // End of file
-    EoF,
+    EoF("EoF"),
     // :
-    DoisPontos
+    DoisPontos(":");
+    
+    private String content; 
+    
+    TokenType(String content) { 
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

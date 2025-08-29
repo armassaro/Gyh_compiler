@@ -2,9 +2,9 @@ package compiladores.ap1_parcial;
 
 public class Token {
     private TokenType type;
-    private char content;
+    private String content;
     
-    public Token(TokenType type, char content) { 
+    public Token(TokenType type, String content) { 
         this.type = type;
         this.content = content;
     }
@@ -21,11 +21,11 @@ public class Token {
         this.type = type;
     }
 
-    public char getContent() {
+    public String getContent() {
         return content;
     }
 
-    public void setContent(char content) {
+    public void setContent(String content) {
         this.content = content;
     }
 }
