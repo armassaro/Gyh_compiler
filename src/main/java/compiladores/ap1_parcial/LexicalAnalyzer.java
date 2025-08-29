@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,33 +22,25 @@ public class LexicalAnalyzer {
     public class Automaton { 
         private State actualState;
         private State firstState;
-        private final Map<String, State> transitionsTable;
+        private final Map<State, Map<String, State>> transitionsMap;
         
-        public class State {
+        public static class State {
             private String label;
-            private Map<String, State> transitionsMap;
             private boolean isFinalState;
-            private TokenType tokenType;
+            private final TokenType tokenType;
             
             // Construtor para o caso do estado não ser final, definindo o TokenType como null
-            public State(String label, Map<String, State> transitionsMap) {
+            public State(String label) {
                 this.label = label;
-                this.transitionsMap = transitionsMap;
                 this.isFinalState = false;
                 this.tokenType = null;
             }
             
             // Construtor para o caso do estado ser final, ou seja, ele deve retornar um TokenType
-            public State(String label, Map<String, State> transitionsMap, boolean isFinalState, TokenType tokenType) {
+            public State(String label, TokenType tokenType) {
                 this.label = label;
-                this.transitionsMap = transitionsMap;
-                this.isFinalState = isFinalState;
+                this.isFinalState = true;
                 this.tokenType = tokenType;
-            }
-            
-            // Construtor dedicado para o HashMap inicial contendo os símbolos
-            public State(String label) { 
-                this.label = label;
             }
 
             public String getLabel() {
@@ -56,14 +49,6 @@ public class LexicalAnalyzer {
 
             public void setLabel(String label) {
                 this.label = label;
-            }
-
-            public Map<String, State> getTransitionsMap() {
-                return transitionsMap;
-            }
-
-            public void setTransitionsMap(HashMap<String, State> transitionsMap) {
-                this.transitionsMap = transitionsMap;
             }
 
             public boolean isFinalState() {
@@ -85,54 +70,33 @@ public class LexicalAnalyzer {
         
         public Automaton() {
             // Declaração do primeiro estado
-            firstState = new State("q0", new HashMap<>());
-            actualState = firstState;
+            actualState = StatesEnum.q_0.getState();
+            firstState = StatesEnum.q_0.getState();
             
-            transitionsTable = Map.ofEntries(
-                // Transições a aprtir do estado q0 
-                Map.entry("[", new State("q_DelimAbre", null, true, TokenType.DelimAbre)),
-                Map.entry("]", new State("q_DelimFecha", null, true, TokenType.DelimFecha)),
-                Map.entry("(", new State("q_AbrePar", null, true, TokenType.AbrePar)),
-                Map.entry(")", new State("q_FecharPar", null, true, TokenType.FechaPar))
+            transitionsMap = Map.ofEntries(
+                Map.entry(firstState, Map.ofEntries(
+                    Map.entry("(", StatesEnum.q_54.getState()),
+                    Map.entry(")", StatesEnum.q_53.getState()),
+                    Map.entry(">", StatesEnum.q_1.getState()),
+                    Map.entry("<", StatesEnum.q_3.getState()),
+                    Map.entry("!", StatesEnum.q_6.getState()),
+                    Map.entry("=", StatesEnum.q_4.getState()),
+                    Map.entry(":", StatesEnum.q_5.getState()),
+                    Map.entry("*", StatesEnum.q_47.getState()),
+                    Map.entry("/", StatesEnum.q_48.getState()),
+                    Map.entry("+", StatesEnum.q_49.getState()),
+                    Map.entry("-", StatesEnum.q_50.getState()),
+                    Map.entry("[", StatesEnum.q_78.getState()),
+                    Map.entry("]", StatesEnum.q_79.getState())
+                )),
+                Map.entry(StatesEnum.q_1.getState(), Map.of("=", StatesEnum.q_76.getState())),
+                Map.entry(StatesEnum.q_3.getState(), Map.of("=", StatesEnum.q_2.getState())),
+                Map.entry(StatesEnum.q_6.getState(), Map.of("=", StatesEnum.q_73.getState())),
+                Map.entry(StatesEnum.q_4.getState(), Map.of("=", StatesEnum.q_74.getState())),
+                Map.entry(StatesEnum.q_5.getState(), Map.of("=", StatesEnum.q_75.getState())),
             );
-            
-            firstState.getTransitionsMap().putAll(transitionsTable);
-            
-            // Criar mapa interno para q0
-//            HashMap<String, StatesEnum> q0Map = new HashMap<>();
-//
-//            // Delimitadores
-//            q0Map.put("[", StatesEnum.q_DelimAbre);
-//            q0Map.put("]", StatesEnum.q_DelimFecha);
-//
-//            // Operadores aritméticos
-//            q0Map.put("*", StatesEnum.q_OpAritMult);
-//            q0Map.put("/", StatesEnum.q_OpAritDiv);
-//            q0Map.put("+", StatesEnum.q_OpAritSoma);
-//            q0Map.put("-", StatesEnum.q_OpAritSub);
-
-            // Operadores relacionais
-//            q0Map.put("<", new State("q_OpRelMenor", new HashMap<>().putAll(Map.ofEntries()
-//                    true, TokenType.OpRelMenor));
-//            q0Map.put("<=", TokenType.OpRelMenorIgual);
-//            q0Map.put(">", TokenType.OpRelMaior);
-//            q0Map.put(">=", TokenType.OpRelMaiorIgual);
-//            q0Map.put("==", TokenType.OpRelIgual);
-//            q0Map.put("!=", TokenType.OpRelDif);
-
-            // Atribuição
-//            HashMap<String, Object> q1Map = new HashMap<>();
-//            q1Map.put("=", TokenType.Atrib);
-//
-//            HashMap<String, Object> colonMap = new HashMap<>();
-//            colonMap.put("q1", q1Map);
-//
-//            q0Map.put(":", colonMap);
-
-            // Adicionar q0 ao mapa principal
-//            actualState.getTransitionsMap().putAll(q0Map);
         }
-
+                
         public State getActualState() {
             return actualState;
         }
@@ -145,8 +109,8 @@ public class LexicalAnalyzer {
             return firstState;
         }
 
-        public Map<String, State> getTransitionsTable() {
-            return transitionsTable;
+        public Map<State, Map<String, State>> getTransitionsMap() {
+            return transitionsMap;
         }
     }
     
@@ -181,26 +145,25 @@ public class LexicalAnalyzer {
     // Possui toda a lógica de leitura de buffer e navegação pelos estados do autômato
     private void readBufferContent() {
         int bufferLength = doubleBuffer[currentBuffer].length;
-        Automaton.State actualState = automaton.getActualState();
+        Map<Automaton.State, Map<String, Automaton.State>> transitionsMap = automaton.getTransitionsMap();
         
         for(int a = 0; a < bufferLength; a++) {
             char ch = doubleBuffer[currentBuffer][a];
             if(ch == '\0') break;
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
-            if(ch == ' ') continue;
+            if(ch == ' ') {
+                // Reseta o autômato par ao estado inicial ao ler um espaço
+                automaton.setActualState(automaton.getFirstState());
+                continue;
+            };
             
             try { 
                 // Avança para o próximo estado do autômato
-                Automaton.State targetState = actualState.getTransitionsMap().get(String.valueOf(ch));
+                Automaton.State targetState = transitionsMap.get(automaton.getActualState()).get(String.valueOf(ch));
                 automaton.setActualState(targetState);
-                System.out.println(targetState.getTransitionsMap());
-    //            if(targetState == null) { 
-    //                System.out.println("Houve um erro de análise léxica no código!");
-    //                return;
-    //            }
 
                 // Se o estado atual não possui mais transições e é um estado final, adiciona para a lista de tokens
-                if(targetState.getTransitionsMap() == null && targetState.isFinalState()) { 
+                if(transitionsMap.get(targetState) == null && targetState.isFinalState()) { 
                     // Adiciona o novo token para a lista de tokens
                     tokenList.add(new Token(targetState.getTokenType(), ch));
                     // Reinicia o automato

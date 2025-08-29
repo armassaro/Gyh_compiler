@@ -24,5 +24,7 @@ public enum TokenType {
     // Declaração de string
     Cadeia,
     // End of file
-    EoF
+    EoF,
+    // :
+    DoisPontos
 }
