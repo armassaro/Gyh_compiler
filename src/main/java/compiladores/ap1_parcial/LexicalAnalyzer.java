@@ -216,22 +216,31 @@ public class LexicalAnalyzer {
     private void readBufferContent() {
         int bufferLength = doubleBuffer[currentBuffer].length;
         Map<Automaton.State, Map<String, Automaton.State>> transitionsMap = automaton.getTransitionsMap();
+        Automaton.State targetState = null;
+        Character ch;
+        StringBuilder readContent = new StringBuilder();
         
         for(int a = 0; a < bufferLength; a++) {
-            char ch = doubleBuffer[currentBuffer][a];
-            if(ch == '\0') break;
+            ch = doubleBuffer[currentBuffer][a];
+            if(ch == '\0' || ch == '\n') break;
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
-            if(ch == ' ') {
+            if(ch == ' ' && targetState != null && targetState.isFinalState()) {
+                // Adiciona o novo token para a lista de tokens
+                tokenList.add(new Token(targetState.getTokenType(), targetState.getTokenType().getContent()));
+                // Reseta o conteúdo de readContent
+                readContent = new StringBuilder();
                 // Reseta o autômato para o estado inicial ao ler um espaço
                 automaton.setActualState(automaton.getFirstState());
                 continue;
-            };
+            }
             
             try { 
                 // Avança para o próximo estado do autômato
-                Automaton.State targetState = transitionsMap.get(automaton.getActualState()).get(String.valueOf(ch));
+                targetState = transitionsMap.get(automaton.getActualState()).get(String.valueOf(ch));
                 automaton.setActualState(targetState);
-
+                // Concatena o conteúdo lido para readContent
+                readContent.append(ch);
+                
                 // Se o estado atual não possui mais transições e é um estado final, adiciona para a lista de tokens
                 if(transitionsMap.get(targetState) == null && targetState.isFinalState()) { 
                     // Adiciona o novo token para a lista de tokens
