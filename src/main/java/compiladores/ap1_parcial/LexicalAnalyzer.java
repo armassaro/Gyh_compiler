@@ -66,6 +66,10 @@ public class LexicalAnalyzer {
             public void setIsFinalState(boolean isFinalState) {
                 this.isFinalState = isFinalState;
             }
+
+            public String toString() {
+                return "label: " + label + ", isFinalState: " + isFinalState + ", tokenType: " + tokenType;
+            }   
         }
         
         public Automaton() {
@@ -106,7 +110,7 @@ public class LexicalAnalyzer {
                 Map.entry(StatesEnum.q_4.getState(), Map.of("=", StatesEnum.q_74.getState())),  // ==
                 Map.entry(StatesEnum.q_5.getState(), Map.of("=", StatesEnum.q_75.getState())),  // :=
                     
-                Map.entry(StatesEnum.q_51.getState(), Map.of("U", StatesEnum.q_51.getState())), // OU
+                Map.entry(StatesEnum.q_51.getState(), Map.of("U", StatesEnum.q_52.getState())), // OU
                 Map.entry(StatesEnum.q_31.getState(), Map.of("E", StatesEnum.q_32.getState())), // SE
                 Map.entry(StatesEnum.q_32.getState(), Map.of("N", StatesEnum.q_33.getState())), // SEN
                 Map.entry(StatesEnum.q_33.getState(), Map.of("A", StatesEnum.q_34.getState())), // SENA
@@ -222,7 +226,11 @@ public class LexicalAnalyzer {
         
         for(int a = 0; a < bufferLength; a++) {
             ch = doubleBuffer[currentBuffer][a];
-            if(ch == '\0' || ch == '\n') break;
+            if(ch == '\0' || ch == '\n') continue;
+            // DEBUG
+            if(targetState != null) { 
+                System.out.println("Lido: " + ch + " | Estado atual: " + automaton.getActualState());
+            }
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
             if(ch == ' ' && targetState != null && targetState.isFinalState()) {
                 // Adiciona o novo token para a lista de tokens
