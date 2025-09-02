@@ -227,10 +227,6 @@ public class LexicalAnalyzer {
         for(int a = 0; a < bufferLength; a++) {
             ch = doubleBuffer[currentBuffer][a];
             if(ch == '\0' || ch == '\n') continue;
-            // DEBUG
-            if(targetState != null) { 
-                System.out.println("Lido: " + ch + " | Estado atual: " + automaton.getActualState());
-            }
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
             if(ch == ' ' && targetState != null && targetState.isFinalState()) {
                 // Adiciona o novo token para a lista de tokens
@@ -248,6 +244,10 @@ public class LexicalAnalyzer {
                 automaton.setActualState(targetState);
                 // Concatena o conteúdo lido para readContent
                 readContent.append(ch);
+
+                if(targetState != null) { 
+                    System.out.println("Lido: " + ch + " | Estado atual: " + automaton.getActualState());
+                }
                 
                 // Se o estado atual não possui mais transições e é um estado final, adiciona para a lista de tokens
                 if(transitionsMap.get(targetState) == null && targetState.isFinalState()) { 
