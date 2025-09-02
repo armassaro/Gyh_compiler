@@ -6,3 +6,4 @@ public class AP1_parcial {
         a.tokenize();
     }
 }
+// teste
