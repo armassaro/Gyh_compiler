@@ -228,12 +228,11 @@ public class LexicalAnalyzer {
             ch = doubleBuffer[currentBuffer][a];
             if(ch == '\0' || ch == '\n') continue;
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
-            if(ch == ' ' && targetState != null && targetState.isFinalState()) {
-                // Adiciona o novo token para a lista de tokens
-                tokenList.add(new Token(targetState.getTokenType(), targetState.getTokenType().getContent()));
-                // Reseta o conteúdo de readContent
-                readContent = new StringBuilder();
-                // Reseta o autômato para o estado inicial ao ler um espaço
+            if (ch == ' ') {
+                if (automaton.getActualState().isFinalState() && readContent.length() > 0) {
+                    tokenList.add(new Token(automaton.getActualState().getTokenType(), readContent.toString()));
+                    readContent = new StringBuilder();
+                }
                 automaton.setActualState(automaton.getFirstState());
                 continue;
             }
