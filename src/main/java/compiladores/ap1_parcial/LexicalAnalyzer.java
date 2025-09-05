@@ -280,6 +280,14 @@ public class LexicalAnalyzer {
         public Map<State, Map<String, State>> getTransitionsMap() {
             return transitionsMap;
         }
+
+        public StringBuilder getReadContent() { 
+            return this.readContent;
+        }
+
+        public void setReadContent(StringBuilder strBuilder) { 
+            this.readContent = strBuilder;
+        }
     }
     
     public LexicalAnalyzer(String fileName) { 
@@ -316,7 +324,7 @@ public class LexicalAnalyzer {
         Map<Automaton.State, Map<String, Automaton.State>> transitionsMap = automaton.getTransitionsMap();
         Automaton.State targetState = null;
         Character ch;
-        StringBuilder readContent = new StringBuilder();
+        StringBuilder readContent = automaton.getReadContent();
 
         for(int a = 0; a < bufferLength; a++) {
             ch = doubleBuffer[currentBuffer][a];
@@ -338,7 +346,7 @@ public class LexicalAnalyzer {
             if (ch == ' ') {
                 if (automaton.getActualState().isFinalState() && readContent.length() > 0) {
                     tokenList.add(new Token(automaton.getActualState().getTokenType(), readContent.toString()));
-                    readContent = new StringBuilder();
+                    readContent = automaton.setReadContent(new StringBuilder());
                 }
                 automaton.setActualState(automaton.getFirstState());
                 continue;
