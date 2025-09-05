@@ -1,11 +1,9 @@
 package compiladores.ap1_parcial;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,6 +16,7 @@ public class LexicalAnalyzer {
     private char[][] doubleBuffer;
     private int currentBuffer = 0;
     private Automaton automaton;
+    private boolean isReadingComment = false;
     
     public class Automaton { 
         private State actualState;
@@ -223,10 +222,23 @@ public class LexicalAnalyzer {
         Automaton.State targetState = null;
         Character ch;
         StringBuilder readContent = new StringBuilder();
-        
+
         for(int a = 0; a < bufferLength; a++) {
             ch = doubleBuffer[currentBuffer][a];
+            // Ativa modo de comentário ao encontrar '#'
+            if (ch == '#') {
+                isReadingComment = true;
+            }
+            // Ignora caracteres enquanto estiver em modo de comentário
+            if (isReadingComment) {
+                if (ch == '\n') {
+                    isReadingComment = false;
+                }
+                continue;
+            }
+
             if(ch == '\0' || ch == '\n') continue;
+            
             // Se for um espaço, ignora. Senão vai tentar ler um espaço no autômato
             if (ch == ' ') {
                 if (automaton.getActualState().isFinalState() && readContent.length() > 0) {
