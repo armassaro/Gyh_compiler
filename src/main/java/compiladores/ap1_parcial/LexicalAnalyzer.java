@@ -22,6 +22,7 @@ public class LexicalAnalyzer {
         private State actualState;
         private State firstState;
         private final Map<State, Map<String, State>> transitionsMap;
+        private StringBuilder readContent;
         
         public static class State {
             private String label;
@@ -75,7 +76,8 @@ public class LexicalAnalyzer {
             // Declaração do primeiro estado
             actualState = StatesEnum.q_0.getState();
             firstState = StatesEnum.q_0.getState();
-            
+            readContent = new StringBuilder();
+
             transitionsMap = Map.ofEntries(
                 // q_0
                 Map.entry(firstState, Map.ofEntries(
@@ -249,16 +251,9 @@ public class LexicalAnalyzer {
                     Map.entry("X", StatesEnum.q_80.getState()),
                     Map.entry("Y", StatesEnum.q_80.getState()),
                     Map.entry("Z", StatesEnum.q_80.getState()),
-
                     // Dígitos numéricos
                     Map.entry("0", StatesEnum.q_80.getState()),
                     Map.entry("1", StatesEnum.q_80.getState()),
-                    Map.entry("4", StatesEnum.q_80.getState()),
-                    Map.entry("5", StatesEnum.q_80.getState()),
-                    Map.entry("6", StatesEnum.q_80.getState()),
-                    Map.entry("7", StatesEnum.q_80.getState()),
-                    Map.entry("8", StatesEnum.q_80.getState()),
-                    Map.entry("9", StatesEnum.q_80.getState()),
                     Map.entry("2", StatesEnum.q_80.getState()),
                     Map.entry("3", StatesEnum.q_80.getState()),
                     Map.entry("4", StatesEnum.q_80.getState()),
@@ -267,7 +262,7 @@ public class LexicalAnalyzer {
                     Map.entry("7", StatesEnum.q_80.getState()),
                     Map.entry("8", StatesEnum.q_80.getState()),
                     Map.entry("9", StatesEnum.q_80.getState())
-            ));
+            )));
         }
                 
         public State getActualState() {
