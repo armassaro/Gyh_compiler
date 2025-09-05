@@ -95,7 +95,9 @@ public enum StatesEnum {
     q_45(new State("q_45")),                                // I
     q_46(new State("q_46")),                                // N
     q_71(new State("q_71")),                                // A
-    q_72(new State("q_72", TokenType.PCFim));               // L
+    q_72(new State("q_72", TokenType.PCFim)),               // L
+
+    q_80(new State("q_80", TokenType.Var));                 // Variável
     
     private final State state;
     

@@ -101,7 +101,34 @@ public class LexicalAnalyzer {
                     Map.entry("L", StatesEnum.q_17.getState()),
                     Map.entry("R", StatesEnum.q_20.getState()),
                     Map.entry("E", StatesEnum.q_36.getState()),
-                    Map.entry("F", StatesEnum.q_44.getState())
+                    Map.entry("F", StatesEnum.q_44.getState()),
+                    // Letras de variável para estado q_80
+                    Map.entry("a", StatesEnum.q_80.getState()),
+                    Map.entry("b", StatesEnum.q_80.getState()),
+                    Map.entry("c", StatesEnum.q_80.getState()),
+                    Map.entry("d", StatesEnum.q_80.getState()),
+                    Map.entry("e", StatesEnum.q_80.getState()),
+                    Map.entry("f", StatesEnum.q_80.getState()),
+                    Map.entry("g", StatesEnum.q_80.getState()),
+                    Map.entry("h", StatesEnum.q_80.getState()),
+                    Map.entry("i", StatesEnum.q_80.getState()),
+                    Map.entry("j", StatesEnum.q_80.getState()),
+                    Map.entry("k", StatesEnum.q_80.getState()),
+                    Map.entry("l", StatesEnum.q_80.getState()),
+                    Map.entry("m", StatesEnum.q_80.getState()),
+                    Map.entry("n", StatesEnum.q_80.getState()),
+                    Map.entry("o", StatesEnum.q_80.getState()),
+                    Map.entry("p", StatesEnum.q_80.getState()),
+                    Map.entry("q", StatesEnum.q_80.getState()),
+                    Map.entry("r", StatesEnum.q_80.getState()),
+                    Map.entry("s", StatesEnum.q_80.getState()),
+                    Map.entry("t", StatesEnum.q_80.getState()),
+                    Map.entry("u", StatesEnum.q_80.getState()),
+                    Map.entry("v", StatesEnum.q_80.getState()),
+                    Map.entry("w", StatesEnum.q_80.getState()),
+                    Map.entry("x", StatesEnum.q_80.getState()),
+                    Map.entry("y", StatesEnum.q_80.getState()),
+                    Map.entry("z", StatesEnum.q_80.getState())
                 )),
                 Map.entry(StatesEnum.q_1.getState(), Map.of("=", StatesEnum.q_76.getState())),  // >=
                 Map.entry(StatesEnum.q_3.getState(), Map.of("=", StatesEnum.q_2.getState())),   // <=
@@ -166,8 +193,81 @@ public class LexicalAnalyzer {
                 Map.entry(StatesEnum.q_44.getState(), Map.of("I", StatesEnum.q_45.getState())), // FI
                 Map.entry(StatesEnum.q_45.getState(), Map.of("N", StatesEnum.q_46.getState())), // FIN
                 Map.entry(StatesEnum.q_46.getState(), Map.of("A", StatesEnum.q_71.getState())), // FINA
-                Map.entry(StatesEnum.q_71.getState(), Map.of("L", StatesEnum.q_72.getState()))  // FINAL
-            );
+                Map.entry(StatesEnum.q_71.getState(), Map.of("L", StatesEnum.q_72.getState())), // FINAL
+                // q_80
+                Map.entry(StatesEnum.q_80.getState(), Map.ofEntries(
+                    Map.entry("a", StatesEnum.q_80.getState()),
+                    Map.entry("b", StatesEnum.q_80.getState()),
+                    Map.entry("c", StatesEnum.q_80.getState()),
+                    Map.entry("d", StatesEnum.q_80.getState()),
+                    Map.entry("e", StatesEnum.q_80.getState()),
+                    Map.entry("f", StatesEnum.q_80.getState()),
+                    Map.entry("g", StatesEnum.q_80.getState()),
+                    Map.entry("h", StatesEnum.q_80.getState()),
+                    Map.entry("i", StatesEnum.q_80.getState()),
+                    Map.entry("j", StatesEnum.q_80.getState()),
+                    Map.entry("k", StatesEnum.q_80.getState()),
+                    Map.entry("l", StatesEnum.q_80.getState()),
+                    Map.entry("m", StatesEnum.q_80.getState()),
+                    Map.entry("n", StatesEnum.q_80.getState()),
+                    Map.entry("o", StatesEnum.q_80.getState()),
+                    Map.entry("p", StatesEnum.q_80.getState()),
+                    Map.entry("q", StatesEnum.q_80.getState()),
+                    Map.entry("r", StatesEnum.q_80.getState()),
+                    Map.entry("s", StatesEnum.q_80.getState()),
+                    Map.entry("t", StatesEnum.q_80.getState()),
+                    Map.entry("u", StatesEnum.q_80.getState()),
+                    Map.entry("v", StatesEnum.q_80.getState()),
+                    Map.entry("w", StatesEnum.q_80.getState()),
+                    Map.entry("x", StatesEnum.q_80.getState()),
+                    Map.entry("y", StatesEnum.q_80.getState()),
+                    Map.entry("z", StatesEnum.q_80.getState()),
+                    // Letras maiúsculas
+                    Map.entry("A", StatesEnum.q_80.getState()),
+                    Map.entry("B", StatesEnum.q_80.getState()),
+                    Map.entry("C", StatesEnum.q_80.getState()),
+                    Map.entry("D", StatesEnum.q_80.getState()),
+                    Map.entry("E", StatesEnum.q_80.getState()),
+                    Map.entry("F", StatesEnum.q_80.getState()),
+                    Map.entry("G", StatesEnum.q_80.getState()),
+                    Map.entry("H", StatesEnum.q_80.getState()),
+                    Map.entry("I", StatesEnum.q_80.getState()),
+                    Map.entry("J", StatesEnum.q_80.getState()),
+                    Map.entry("K", StatesEnum.q_80.getState()),
+                    Map.entry("L", StatesEnum.q_80.getState()),
+                    Map.entry("M", StatesEnum.q_80.getState()),
+                    Map.entry("N", StatesEnum.q_80.getState()),
+                    Map.entry("O", StatesEnum.q_80.getState()),
+                    Map.entry("P", StatesEnum.q_80.getState()),
+                    Map.entry("Q", StatesEnum.q_80.getState()),
+                    Map.entry("R", StatesEnum.q_80.getState()),
+                    Map.entry("S", StatesEnum.q_80.getState()),
+                    Map.entry("T", StatesEnum.q_80.getState()),
+                    Map.entry("U", StatesEnum.q_80.getState()),
+                    Map.entry("V", StatesEnum.q_80.getState()),
+                    Map.entry("W", StatesEnum.q_80.getState()),
+                    Map.entry("X", StatesEnum.q_80.getState()),
+                    Map.entry("Y", StatesEnum.q_80.getState()),
+                    Map.entry("Z", StatesEnum.q_80.getState()),
+
+                    // Dígitos numéricos
+                    Map.entry("0", StatesEnum.q_80.getState()),
+                    Map.entry("1", StatesEnum.q_80.getState()),
+                    Map.entry("4", StatesEnum.q_80.getState()),
+                    Map.entry("5", StatesEnum.q_80.getState()),
+                    Map.entry("6", StatesEnum.q_80.getState()),
+                    Map.entry("7", StatesEnum.q_80.getState()),
+                    Map.entry("8", StatesEnum.q_80.getState()),
+                    Map.entry("9", StatesEnum.q_80.getState()),
+                    Map.entry("2", StatesEnum.q_80.getState()),
+                    Map.entry("3", StatesEnum.q_80.getState()),
+                    Map.entry("4", StatesEnum.q_80.getState()),
+                    Map.entry("5", StatesEnum.q_80.getState()),
+                    Map.entry("6", StatesEnum.q_80.getState()),
+                    Map.entry("7", StatesEnum.q_80.getState()),
+                    Map.entry("8", StatesEnum.q_80.getState()),
+                    Map.entry("9", StatesEnum.q_80.getState())
+            ));
         }
                 
         public State getActualState() {
@@ -225,7 +325,7 @@ public class LexicalAnalyzer {
 
         for(int a = 0; a < bufferLength; a++) {
             ch = doubleBuffer[currentBuffer][a];
-            // Ativa modo de comentário ao encontrar '#'
+            // Começa a ler um comentário
             if (ch == '#') {
                 isReadingComment = true;
             }
